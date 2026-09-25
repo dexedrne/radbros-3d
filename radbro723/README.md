@@ -24,7 +24,7 @@ load `_clips_web.glb` next to `_web.glb` and play its clips on that character. t
 
 [radbros-3d-all.zip](https://github.com/dexedrne/radbros-3d/releases/download/v1/radbros-3d-all.zip) has #723 with all 14 clips in one file, a rigged rest-pose file and a static mesh. [radbro723-3d-model.zip](https://github.com/dexedrne/radbros-3d/releases/download/v1/radbro723-3d-model.zip) has him on his own.
 
-- 1.80 m including the hat tall, metres, y-up, facing +z, origin between the feet
+- 1.80 m tall including the hat, metres, y-up, facing +z, origin between the feet
 - 59,633 triangles, 2048 colour map (also wired to emissive for the flat look)
 - 24-bone mixamo-style rig, same bone names as the other three
 - the static file is 1.90 units tall with a centred origin; the rigged files are the ones to use in a game
