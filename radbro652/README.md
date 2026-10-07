@@ -26,7 +26,7 @@ load `_clips_web.glb` next to `_web.glb` and play its clips on that character. t
 
 - 1.70 m tall, metres, y-up, facing +z, origin between the feet
 - 59,079 triangles, 2048 colour map (also wired to emissive for the flat look)
-- 24-bone mixamo-style rig, same bone names as the other three
+- 24-bone mixamo-style rig, same bone names as the other five
 - the static file is 1.90 units tall with a centred origin; the rigged files are the ones to use in a game
 
 ## license
