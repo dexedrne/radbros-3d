@@ -117,4 +117,4 @@ File > Import > glTF 2.0. the full-quality files from the release come in with t
 
 radbros #4764, #652, #3704, #3710, #723 and #2564 are my own radbros, made 3d with the Radbro Webring dev's ok. original characters by [Radbro Webring](https://radbro.xyz). 3d models by dexedrne.
 
-made something with them? tag [@dexedrne](https://x.com/dexedrne).
+if you use them, please credit me on x: [@dexedrne](https://x.com/dexedrne). made something with them? tag me, i'd like to see it.
