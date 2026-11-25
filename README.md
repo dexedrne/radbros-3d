@@ -1,14 +1,14 @@
 # radbros-3d
 
-six radbros as rigged, animated 3d characters. glTF, textures baked in, free to use for anything.
+seven radbros as rigged, animated 3d characters. glTF, textures baked in, free to use for anything.
 
 | [![#4764](radbro4764/portrait_radbro4764.webp)](radbro4764) | [![#652](radbro652/portrait_radbro652.webp)](radbro652) | [![#3704](radbro3704/portrait_radbro3704.webp)](radbro3704) | [![#3710](radbro3710/portrait_radbro3710.webp)](radbro3710) |
 |:-:|:-:|:-:|:-:|
 | [**#4764**](radbro4764) · katana | [**#652**](radbro652) · nobody sweatshirt | [**#3704**](radbro3704) · launcher | [**#3710**](radbro3710) · nobody tee |
 
-| [![#723](radbro723/portrait_radbro723.webp)](radbro723) | [![#2564](radbro2564/portrait_radbro2564.webp)](radbro2564) |
-|:-:|:-:|
-| [**#723**](radbro723) · cowboy hat | [**#2564**](radbro2564) · ghost |
+| [![#723](radbro723/portrait_radbro723.webp)](radbro723) | [![#2564](radbro2564/portrait_radbro2564.webp)](radbro2564) | [![#96](radbro96/portrait_radbro96.webp)](radbro96) |
+|:-:|:-:|:-:|
+| [**#723**](radbro723) · cowboy hat | [**#2564**](radbro2564) · ghost | [**#96**](radbro96) · blvck ceiling cap |
 
 ## download
 
@@ -23,6 +23,7 @@ full-quality files are on the [release page](https://github.com/dexedrne/radbros
 | [radbro3710-3d-model.zip](https://github.com/dexedrne/radbros-3d/releases/download/v1/radbro3710-3d-model.zip) | #3710 on its own (23 clips) |
 | [radbro2564-3d-model.zip](https://github.com/dexedrne/radbros-3d/releases/download/v1/radbro2564-3d-model.zip) | #2564 on its own (7 clips; the all-in-one zip has his full 21) |
 | [radbro723-3d-model.zip](https://github.com/dexedrne/radbros-3d/releases/download/v1/radbro723-3d-model.zip) | #723 on its own (12 clips; the all-in-one zip has 14) |
+| [radbro96-3d-model.zip](https://github.com/dexedrne/radbros-3d/releases/download/v1/radbro96-3d-model.zip) | #96 on its own (14 clips). not in the all-in-one zip yet |
 
 each character comes as a static mesh, a rigged mesh in rest pose, and a rigged mesh with all its clips.
 
@@ -35,9 +36,9 @@ this repo holds the small web versions, one folder per character:
 
 ## specs
 
-- 1.70 m tall (#723 is 1.80 with the hat). metres, y-up, facing +z, origin on the ground between the feet
+- 1.70 m tall (#723 is 1.80 with the hat, #96 is 1.78 with the cap). metres, y-up, facing +z, origin on the ground between the feet
 - ~60k triangles, one mesh and one 2048 texture each. #3704 has 61,355 triangles; #3710 has 61,327. #4764's katana is its own small mesh on the hips, so you can hide it
-- 24-bone mixamo-style rig with the same bone names on all six. no finger bones
+- 24-bone mixamo-style rig with the same bone names on all seven. no finger bones
 - flat art style: the colour map also drives emissive, so they read like the 2d art under any light. an unlit material gives exact colours
 - hands open and empty. #3704's launcher is a separate prop file in the zips. fishing, hanging and sitting are the motion only
 
