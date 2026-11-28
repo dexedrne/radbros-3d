@@ -78,13 +78,14 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js'
 
-const base = 'https://cdn.jsdelivr.net/gh/dexedrne/radbros-3d@v1/radbro4764/'
+const character = 'radbro4764'
+const base = `https://cdn.jsdelivr.net/gh/dexedrne/radbros-3d@00bab2c21eb96c8b11babb1628f3721bcf411017/${character}/`
 const draco = new DRACOLoader().setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/libs/draco/gltf/')
 const loader = new GLTFLoader().setDRACOLoader(draco)
 
 const [bro, more] = await Promise.all([
-  loader.loadAsync(base + 'radbro4764_web.glb'),
-  loader.loadAsync(base + 'radbro4764_clips_web.glb'),
+  loader.loadAsync(base + `${character}_web.glb`),
+  loader.loadAsync(base + `${character}_clips_web.glb`),
 ])
 scene.add(bro.scene)
 
@@ -95,7 +96,7 @@ mixer.clipAction(THREE.AnimationClip.findByName(clips, 'Idle')).play()
 // every frame: mixer.update(clock.getDelta())
 ```
 
-clips from `_clips_web.glb` bind to the character by bone name, so they play on the web file as-is. keep each character's clips with that character; the rigs differ.
+change `character` to any of the seven folder names above. clips from `_clips_web.glb` bind to that character by bone name, so load both files from the same folder.
 
 ### model-viewer
 
@@ -103,7 +104,7 @@ clips from `_clips_web.glb` bind to the character by bone name, so they play on 
 <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.3.1/dist/model-viewer.min.js"></script>
 
 <model-viewer
-  src="https://cdn.jsdelivr.net/gh/dexedrne/radbros-3d@v1/radbro723/radbro723_web.glb"
+  src="https://cdn.jsdelivr.net/gh/dexedrne/radbros-3d@00bab2c21eb96c8b11babb1628f3721bcf411017/radbro96/radbro96_web.glb"
   animation-name="Casual_Walk" autoplay camera-controls>
 </model-viewer>
 ```
