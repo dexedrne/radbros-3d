@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Radbros 3D Roster</title>
+<link rel="icon" href="radbro4764/portrait_radbro4764.webp" type="image/webp">
+<style>
+  :root { color-scheme: dark; font-family: system-ui, sans-serif; background: #181917; color: #f5f2e8; }
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  main { max-width: 62rem; margin: auto; padding: clamp(1rem, 4vw, 2.5rem); }
+  h1 { margin: 0 0 1rem; font-weight: 800; letter-spacing: -.04em; font-size: clamp(2rem, 6vw, 4rem); }
+  a { color: #d5ed91; }
+  .bar { display: flex; align-items: end; flex-wrap: wrap; gap: .7rem; margin-bottom: .8rem; }
+  label { display: grid; gap: .25rem; font-size: .86rem; }
+  select, button { min-height: 2.5rem; padding: .45rem .6rem; background: #262923; color: #f5f2e8; border: 1px solid #777c69; border-radius: .3rem; font: inherit; max-width: 100%; }
+  #stage { height: clamp(20rem, 62vh, 46rem); border: 1px solid #454a3b; border-radius: .35rem; overflow: hidden; }
+  canvas { display: block; touch-action: none; }
+  #status { min-height: 1.5rem; margin: .7rem 0; color: #d5d7ce; }
+</style>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"}}
+</script>
+</head>
+<body>
+<main>
+  <h1>Radbros 3D</h1>
+  <div class="bar">
+    <label>Character
+      <select id="character">
+        <option value="radbro4764">#4764</option><option value="radbro652">#652</option>
+        <option value="radbro3704">#3704</option><option value="radbro3710">#3710</option>
+        <option value="radbro723">#723</option><option value="radbro2564">#2564</option>
+        <option value="radbro96">#96</option>
+      </select>
+    </label>
+    <label>Animation <select id="animation" disabled></select></label>
+    <button id="play" type="button" disabled>Pause</button>
+  </div>
+  <div id="stage" role="img" aria-label="Interactive 3D character preview"></div>
+  <p id="status" role="status">Loading the 3D viewer…</p>
+  <a href="https://github.com/dexedrne/radbros-3d/releases/tag/v1">Download the models</a>
+  · <a href="https://github.com/dexedrne/radbros-3d">Project on GitHub</a>
+</main>
+<script type="module">
+const status = document.querySelector('#status');
+try {
+  const [THREE, { GLTFLoader }, { DRACOLoader }, { OrbitControls }] = await Promise.all([
+    import('three'), import('three/addons/loaders/GLTFLoader.js'),
+    import('three/addons/loaders/DRACOLoader.js'), import('three/addons/controls/OrbitControls.js'),
+  ]);
+  const stage = document.querySelector('#stage');
+  const character = document.querySelector('#character');
+  const animation = document.querySelector('#animation');
+  const play = document.querySelector('#play');
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  stage.append(renderer.domElement);
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x272b22);
+  const camera = new THREE.PerspectiveCamera(36, 1, .05, 30);
+  camera.position.set(2.3, 1.55, 3);
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.target.set(0, .96, 0);
+  controls.minDistance = 1.4;
+  controls.maxDistance = 7;
+  controls.maxPolarAngle = Math.PI / 2;
+  controls.update();
+  scene.add(new THREE.GridHelper(10, 20, 0x515748, 0x3e4438));
+  new ResizeObserver(() => {
+    renderer.setSize(stage.clientWidth, stage.clientHeight);
+    camera.aspect = stage.clientWidth / stage.clientHeight;
+    camera.updateProjectionMatrix();
+  }).observe(stage);
+
+  const draco = new DRACOLoader().setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/libs/draco/gltf/');
+  const loader = new GLTFLoader().setDRACOLoader(draco);
+  let model, mixer, action;
+  let playing = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function setPlaying(value) {
+    playing = value;
+    play.textContent = playing ? 'Pause' : 'Play';
+  }
+  function selectAnimation() {
+    action?.stop();
+    action = mixer.clipAction(model.animations.find(clip => clip.name === animation.value));
+    action.play();
+    mixer.update(0);
+  }
+  async function loadCharacter() {
+    const name = character.value;
+    character.disabled = animation.disabled = play.disabled = true;
+    status.textContent = 'Loading #' + name.slice(6) + '…';
+    try {
+      const [next, extra] = await Promise.all([
+        loader.loadAsync(name + '/' + name + '_web.glb'),
+        loader.loadAsync(name + '/' + name + '_clips_web.glb'),
+      ]);
+      if (model) {
+        mixer.stopAllAction();
+        scene.remove(model.scene);
+        model.scene.traverse(object => {
+          if (!object.isMesh) return;
+          object.geometry.dispose();
+          for (const material of [object.material].flat()) {
+            material.map?.dispose();
+            material.dispose();
+          }
+        });
+      }
+      model = next;
+      model.animations.push(...extra.animations);
+      for (const clip of model.animations) {
+        const hips = clip.tracks.find(track => track.name === 'Hips.position');
+        if (!hips) continue;
+        // Keep traveling animations in view while preserving vertical motion.
+        for (let i = 3; i < hips.values.length; i += 3) {
+          hips.values[i] = hips.values[0];
+          hips.values[i + 2] = hips.values[2];
+        }
+      }
+      scene.add(model.scene);
+      mixer = new THREE.AnimationMixer(model.scene);
+      animation.replaceChildren(...model.animations.map(clip => new Option(clip.name.replaceAll('_', ' '), clip.name)));
+      animation.value = 'Idle';
+      selectAnimation();
+      status.textContent = 'Drag to rotate. Scroll or pinch to zoom.';
+    } catch {
+      status.textContent = 'The model could not load. Choose a character to retry or download the files below.';
+    } finally {
+      character.disabled = false;
+      animation.disabled = play.disabled = !model;
+    }
+  }
+  character.addEventListener('change', loadCharacter);
+  animation.addEventListener('change', selectAnimation);
+  play.addEventListener('click', () => setPlaying(!playing));
+  setPlaying(playing);
+  let previous = performance.now();
+  renderer.setAnimationLoop(now => {
+    if (playing) mixer?.update(Math.min((now - previous) / 1000, .05));
+    previous = now;
+    renderer.render(scene, camera);
+  });
+  await loadCharacter();
+} catch {
+  status.textContent = 'The 3D viewer could not start. The model downloads are available below.';
+}
+</script>
+</body>
+</html>
